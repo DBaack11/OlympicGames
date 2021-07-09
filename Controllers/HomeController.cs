@@ -33,11 +33,11 @@ namespace OlympicGames.Controllers
             IQueryable<Country> query = context.Countries;
             if(activeCategory != "all")
             {
-                query = query.Where(t => t.CategoryID.ToLower() == activeCategory.ToLower());
+                query = query.Where(c => c.Category.CategoryID.ToLower() == activeCategory.ToLower());
             }
             if(activeGame != "all")
             {
-                query = query.Where(t => t.GameID.ToLower() == activeGame.ToLower());
+                query = query.Where(c => c.Game.GameID.ToLower() == activeGame.ToLower());
             }
 
             model.Countries = query.ToList();
@@ -47,7 +47,6 @@ namespace OlympicGames.Controllers
         [HttpPost]
         public RedirectToActionResult Details(CountryViewModel model)
         {
-            // Utility.LogCountryClick(model.Country.CountryID);
             TempData["ActiveCategory"] = model.ActiveCategory;
             TempData["ActiveGame"] = model.ActiveGame;
             return RedirectToAction("Details", new { ID = model.Country.CountryID });
@@ -58,10 +57,7 @@ namespace OlympicGames.Controllers
         {
             var model = new CountryViewModel
             {
-                Country = context.Countries
-                        .Include(c => c.CategoryID)
-                        .Include(c => c.GameID)
-                        .FirstOrDefault(c => c.CountryID == id),
+                Country = context.Countries.Include(t => t.Category).Include(t => t.Game).FirstOrDefault(t => t.CountryID == id),
                 ActiveGame = TempData?["ActiveGame"]?.ToString() ?? "all",
                 ActiveCategory = TempData?["ActiveCategory"]?.ToString() ?? "all"
             };
