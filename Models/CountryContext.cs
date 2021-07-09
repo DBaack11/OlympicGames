@@ -42,7 +42,7 @@ namespace OlympicGames.Models
                 new Country { CountryID = "sweden", CountryName = "Sweden", GameID = "winter", CategoryID = "indoorCurling", LogoImage = "sweden.png" },
                 new Country { CountryID = "greatBritain", CountryName = "Great Britain", GameID = "winter", CategoryID = "indoorCurling", LogoImage = "greatBritain.png" },
                 new Country { CountryID = "jamaica", CountryName = "Jamaica", GameID = "winter", CategoryID = "outdoorBobsleigh", LogoImage = "jamaica.png" },
-                new Country { CountryID = "italy", CountryName = "Italy", GameID = "winter", CategoryID = "outdoorBobsleigh", LogoImage = "italy.png" },
+                new Country { CountryID = "italy", CountryName = "Italy", GameID = "winter", CategoryID = "outdoorBobsleigh", LogoImage = "italy.jpg" },
                 new Country { CountryID = "japan", CountryName = "Japan", GameID = "winter", CategoryID = "outdoorBobsleigh", LogoImage = "japan.png" },
                 new Country { CountryID = "germany", CountryName = "Germany", GameID = "summer", CategoryID = "indoorDiving", LogoImage = "germany.png" },
                 new Country { CountryID = "china", CountryName = "China", GameID = "summer", CategoryID = "indoorDiving", LogoImage = "china.png" },
