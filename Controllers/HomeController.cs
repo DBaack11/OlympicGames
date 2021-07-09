@@ -22,6 +22,10 @@ namespace OlympicGames.Controllers
 
         public ViewResult Index(string activeCategory = "all", string activeGame = "all")
         {
+            var session = new OlympicSession(HttpContext.Session);
+            session.SetActiveCategory(activeCategory);
+            session.SetActiveGame(activeGame);
+
             var model = new CountryListViewModel
             {
                 ActiveCategory = activeCategory,
@@ -55,16 +59,41 @@ namespace OlympicGames.Controllers
         [HttpGet]
         public ViewResult Details(string id)
         {
+            var session = new OlympicSession(HttpContext.Session);
             var model = new CountryViewModel
             {
                 Country = context.Countries
                     .Include(t => t.Category)
                     .Include(t => t.Game)
                     .FirstOrDefault(t => t.CountryID == id),
-                ActiveGame = TempData["ActiveGame"]?.ToString() ?? "all",
-                ActiveCategory = TempData["ActiveCategory"]?.ToString() ?? "all"
+                ActiveGame = session.GetActiveGame(),
+                ActiveCategory = session.GetActiveCategory()
             };
             return View(model);
+        }
+
+        [HttpPost]
+        public RedirectToActionResult Add(CountryViewModel model)
+        {
+            model.Country = context.Countries
+                .Include(t => t.Category)
+                .Include(t => t.Game)
+                .Where(t => t.CountryID == model.Country.CountryID)
+                .FirstOrDefault();
+
+            var session = new OlympicSession(HttpContext.Session);
+            var countries = session.GetMyCountries();
+            countries.Add(model.Country);
+            session.SetMyCountries(countries);
+
+            TempData["message"] = $"{model.Country.CountryName} added to your favorites.";
+
+            return RedirectToAction("Index",
+                new
+                {
+                    ActiveCategory = session.GetActiveCategory(),
+                    ActiveGame = session.GetActiveGame()
+                });
         }
     }
 }
