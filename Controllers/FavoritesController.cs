@@ -26,7 +26,10 @@ namespace OlympicGames.Controllers
         public RedirectToActionResult Delete()
         {
             var session = new OlympicSession(HttpContext.Session);
+            var cookies = new OlympicCookies(Response.Cookies);
+
             session.RemoveMyCountries();
+            cookies.RemoveMyCountryIds();
 
             TempData["message"] = "Favorite Countries Cleared";
 

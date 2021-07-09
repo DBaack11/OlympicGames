@@ -26,6 +26,21 @@ namespace OlympicGames.Controllers
             session.SetActiveCategory(activeCategory);
             session.SetActiveGame(activeGame);
 
+            int? count = session.GetMyCountryCount();
+            if (count == null)
+            {
+                var cookies = new OlympicCookies(Request.Cookies);
+                string[] ids = cookies.GetMyCountryIds();
+
+                List<Country> mycountries = new List<Country>();
+                if (ids.Length > 0)
+                {
+                    mycountries = context.Countries.Include(t => t.Category)
+                        .Include(t => t.Game)
+                        .Where(t => ids.Contains(t.CountryID)).ToList();
+                }
+                session.SetMyCountries(mycountries);
+            }
             var model = new CountryListViewModel
             {
                 ActiveCategory = activeCategory,
@@ -60,6 +75,7 @@ namespace OlympicGames.Controllers
         public ViewResult Details(string id)
         {
             var session = new OlympicSession(HttpContext.Session);
+
             var model = new CountryViewModel
             {
                 Country = context.Countries
@@ -85,6 +101,9 @@ namespace OlympicGames.Controllers
             var countries = session.GetMyCountries();
             countries.Add(model.Country);
             session.SetMyCountries(countries);
+
+            var cookies = new OlympicCookies(Response.Cookies);
+            cookies.SetMyCountryIds(countries);
 
             TempData["message"] = $"{model.Country.CountryName} added to your favorites.";
 

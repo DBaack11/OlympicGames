@@ -26,7 +26,7 @@ namespace OlympicGames.Models
         }
 
         public List<Country> GetMyCountries() => session.GetObject<List<Country>>(CountriesKey) ?? new List<Country>();
-        public int GetMyCountryCount() => session.GetInt32(CountKey) ?? 0;
+        public int? GetMyCountryCount() => session.GetInt32(CountKey) ?? 0;
         public void SetActiveCategory(string activeCategory) => session.SetString(CategoryKey, activeCategory);
         public string GetActiveCategory() => session.GetString(CategoryKey);
         public void SetActiveGame(string activeGame) => session.SetString(GameKey, activeGame);
