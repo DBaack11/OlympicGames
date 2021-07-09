@@ -57,9 +57,12 @@ namespace OlympicGames.Controllers
         {
             var model = new CountryViewModel
             {
-                Country = context.Countries.Include(t => t.Category).Include(t => t.Game).FirstOrDefault(t => t.CountryID == id),
-                ActiveGame = TempData?["ActiveGame"]?.ToString() ?? "all",
-                ActiveCategory = TempData?["ActiveCategory"]?.ToString() ?? "all"
+                Country = context.Countries
+                    .Include(t => t.Category)
+                    .Include(t => t.Game)
+                    .FirstOrDefault(t => t.CountryID == id),
+                ActiveGame = TempData["ActiveGame"]?.ToString() ?? "all",
+                ActiveCategory = TempData["ActiveCategory"]?.ToString() ?? "all"
             };
             return View(model);
         }
