@@ -5,11 +5,9 @@ using System.Threading.Tasks;
 
 namespace OlympicGames.Models
 {
-    public class CountryListViewModel
+    public class CountryListViewModel : CountryViewModel
     {
         public List<Country> Countries { get; set; }
-        public string ActiveCategory { get; set; }
-        public string ActiveGame { get; set; }
 
         private List<Category> categories;
         public List<Category> Categories {

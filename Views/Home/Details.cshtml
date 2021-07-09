@@ -1,0 +1,27 @@
+﻿@model CountryViewModel
+@{ 
+    ViewData["Title"] = "Country Details";
+}
+
+<h2>Country Details</h2>
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+        <ul class="list-group text-center">
+            <li class="list-group-item">
+                <img src="~/images/@Model.Country.LogoImage" alt=""/>
+                <h3>@Model.Country.CountryName</h3>
+            </li>
+            <li class="list-group-item">
+                <h4>Category: @Model.Country.CategoryID</h4>
+            </li>
+            <li class="list-group-item">
+                <h4>Game: @Model.Country.GameID</h4>
+            </li>
+            <li class="list-group-item">
+                <a asp-action="Index" asp-route-activeCategory="@Model.ActiveCategory"
+                   asp-route-activeGame="@Model.ActiveGame">Return to Home Page</a>
+            </li>
+        </ul>
+    </div>
+</div>

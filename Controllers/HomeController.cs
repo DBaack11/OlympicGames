@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using OlympicGames.Models;
 using System;
 using System.Collections.Generic;
@@ -39,6 +41,30 @@ namespace OlympicGames.Controllers
             }
 
             model.Countries = query.ToList();
+            return View(model);
+        }
+
+        [HttpPost]
+        public RedirectToActionResult Details(CountryViewModel model)
+        {
+            // Utility.LogCountryClick(model.Country.CountryID);
+            TempData["ActiveCategory"] = model.ActiveCategory;
+            TempData["ActiveGame"] = model.ActiveGame;
+            return RedirectToAction("Details", new { ID = model.Country.CountryID });
+        }
+
+        [HttpGet]
+        public ViewResult Details(string id)
+        {
+            var model = new CountryViewModel
+            {
+                Country = context.Countries
+                        .Include(c => c.CategoryID)
+                        .Include(c => c.GameID)
+                        .FirstOrDefault(c => c.CountryID == id),
+                ActiveGame = TempData?["ActiveGame"]?.ToString() ?? "all",
+                ActiveCategory = TempData?["ActiveCategory"]?.ToString() ?? "all"
+            };
             return View(model);
         }
     }
