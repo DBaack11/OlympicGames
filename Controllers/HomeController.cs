@@ -20,11 +20,16 @@ namespace OlympicGames.Controllers
             context = ctx;
         }
 
-        public ViewResult Index(string activeCategory = "all", string activeGame = "all")
+        
+
+        public IActionResult Index(CountryListViewModel model)
         {
+            model.Categories = context.Categories.ToList();
+            model.Games = context.Games.ToList();
+
             var session = new OlympicSession(HttpContext.Session);
-            session.SetActiveCategory(activeCategory);
-            session.SetActiveGame(activeGame);
+            session.SetActiveCategory(model.ActiveCategory);
+            session.SetActiveGame(model.ActiveGame);
 
             int? count = session.GetMyCountryCount();
             if (count == null)
@@ -41,22 +46,16 @@ namespace OlympicGames.Controllers
                 }
                 session.SetMyCountries(mycountries);
             }
-            var model = new CountryListViewModel
-            {
-                ActiveCategory = activeCategory,
-                ActiveGame = activeGame,
-                Categories = context.Categories.ToList(),
-                Games = context.Games.ToList()
-            };
+           
 
             IQueryable<Country> query = context.Countries;
-            if(activeCategory != "all")
+            if(model.ActiveCategory != "all")
             {
-                query = query.Where(c => c.Category.CategoryID.ToLower() == activeCategory.ToLower());
+                query = query.Where(c => c.Category.CategoryID.ToLower() == model.ActiveCategory.ToLower());
             }
-            if(activeGame != "all")
+            if(model.ActiveGame != "all")
             {
-                query = query.Where(c => c.Game.GameID.ToLower() == activeGame.ToLower());
+                query = query.Where(c => c.Game.GameID.ToLower() == model.ActiveGame.ToLower());
             }
 
             model.Countries = query.ToList();
