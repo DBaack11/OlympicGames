@@ -20,8 +20,6 @@ namespace OlympicGames.Controllers
             context = ctx;
         }
 
-        
-
         public IActionResult Index(CountryListViewModel model)
         {
             model.Categories = context.Categories.ToList();
